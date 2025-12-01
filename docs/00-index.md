@@ -10,8 +10,10 @@
 ### Architettura e Pattern
 - **[Folio + Volt Patterns](./folio-volt-patterns.md)** - Pattern comuni per Folio e Volt nel tema
 - **[Folio + Volt Projects Analysis](./folio-volt-projects-analysis.md)** - Analisi progetti reali con focus UI/UX e componenti applicabili al tema
-- **[Architecture Improvements](./ARCHITECTURE-IMPROVEMENTS.md)** - Miglioramenti architetturali
-- **[Theme Integration Guide](./THEME-INTEGRATION-GUIDE.md)** - Guida integrazione tema
+- **[Architecture Improvements](./architecture-improvements.md)** - Miglioramenti architetturali
+- **[Theme Integration Guide](./theme-integration-guide.md)** - Guida integrazione tema
+- **[Genesis Starter Kit Analysis](../../Modules/Meetup/docs/genesis-starter-kit-analysis.md)** - Analisi approfondita dello starter kit Genesis (TALL Stack + Folio + Volt)
+- **[Livewire Volt Folio Tutorial Analysis](../../Modules/Meetup/docs/livewire-volt-folio-tutorial-analysis.md)** - Analisi tutorial pratico: costruire podcast player con Folio + Volt
 
 ### Design e UI/UX
 - **[Complete Design Analysis](./complete-design-analysis.md)** - Analisi completa design

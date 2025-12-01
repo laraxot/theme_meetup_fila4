@@ -1,24 +1,150 @@
-// Laravel Pizza Theme JavaScript
-import Alpine from 'alpinejs';
-import focus from '@alpinejs/focus';
+// Laravel Pizza - Main JavaScript
+// Laravel Pizza - Main JavaScript
+// import './components/AppHeader.js';
 
-// Initialize Alpine.js
-Alpine.plugin(focus);
-window.Alpine = Alpine;
-Alpine.start();
 
-// Mobile Menu Toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.querySelector('.mobile-menu-button');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    
-    if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
+// Cart management with localStorage persistence
+class PizzaCart {
+    constructor() {
+        this.cartKey = 'laravelpizza_cart';
+        this.cart = this.getCartFromStorage();
+        this.updateCartDisplay();
+    }
+
+    getCartFromStorage() {
+        const cartData = localStorage.getItem(this.cartKey);
+        return cartData ? JSON.parse(cartData) : [];
+    }
+
+    saveCartToStorage() {
+        localStorage.setItem(this.cartKey, JSON.stringify(this.cart));
+    }
+
+    addItem(pizzaId, pizzaName, price = 0) {
+        // Check if item already exists in cart
+        const existingItem = this.cart.find(item => item.id === pizzaId);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.cart.push({
+                id: pizzaId,
+                name: pizzaName,
+                price: price,
+                quantity: 1
+            });
+        }
+
+        this.saveCartToStorage();
+        this.updateCartDisplay();
+
+        // Announce to screen readers
+        this.announceToScreenReader(`${pizzaName} aggiunta al carrello`);
+    }
+
+    removeItem(pizzaId) {
+        this.cart = this.cart.filter(item => item.id !== pizzaId);
+        this.saveCartToStorage();
+        this.updateCartDisplay();
+    }
+
+    updateQuantity(pizzaId, quantity) {
+        const item = this.cart.find(item => item.id === pizzaId);
+        if (item) {
+            if (quantity <= 0) {
+                this.removeItem(pizzaId);
+            } else {
+                item.quantity = quantity;
+                this.saveCartToStorage();
+                this.updateCartDisplay();
+            }
+        }
+    }
+
+    getCartTotal() {
+        return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    getCartCount() {
+        return this.cart.reduce((count, item) => count + item.quantity, 0);
+    }
+
+    updateCartDisplay() {
+        const cartCountElements = document.querySelectorAll('#cart-count');
+        const cartTotalElements = document.querySelectorAll('#cart-total');
+
+        cartCountElements.forEach(element => {
+            if (element) {
+                element.textContent = this.getCartCount();
+                element.setAttribute('aria-label', `Carrello, ${this.getCartCount()} elementi`);
+            }
+        });
+
+        cartTotalElements.forEach(element => {
+            if (element) {
+                element.textContent = this.getCartTotal().toFixed(2) + '€';
+            }
         });
     }
-    
-    // Smooth scrolling for anchor links
+
+    announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+
+        document.body.appendChild(announcement);
+
+        setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
+    }
+
+    getCartItems() {
+        return this.cart;
+    }
+
+    clearCart() {
+        this.cart = [];
+        this.saveCartToStorage();
+        this.updateCartDisplay();
+    }
+}
+
+// Initialize cart
+let pizzaCart;
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize cart
+    pizzaCart = new PizzaCart();
+
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function () {
+            const isExpanded = mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+        });
+    }
+
+    // Cart functionality for add to cart buttons
+    const cartButtons = document.querySelectorAll('.add-to-cart');
+    cartButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const pizzaId = this.dataset.pizzaId;
+            const pizzaName = this.dataset.pizzaName;
+            const pizzaPrice = parseFloat(this.dataset.pizzaPrice) || 0;
+
+            pizzaCart.addItem(pizzaId, pizzaName, pizzaPrice);
+            showNotification(`${pizzaName} aggiunta al carrello!`);
+        });
+    });
+
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -28,131 +154,139 @@ document.addEventListener('DOMContentLoaded', function() {
                     behavior: 'smooth',
                     block: 'start'
                 });
-                
-                // Close mobile menu if open
-                if (!mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.add('hidden');
+
+                // Accessibility: Focus the target element
+                if (target.tabIndex < 0) {
+                    target.tabIndex = -1;
                 }
+                target.focus();
             }
         });
     });
-    
-    // Cart functionality
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const pizzaName = this.getAttribute('data-pizza-name');
-            const pizzaPrice = this.getAttribute('data-pizza-price');
-            
-            // Add to cart animation
-            this.innerHTML = '<i class="fas fa-check mr-2"></i>Aggiunto!';
-            this.classList.remove('bg-pizza-red', 'hover:bg-red-700');
-            this.classList.add('bg-green-500', 'hover:bg-green-600');
-            
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-plus mr-1"></i>Aggiungi';
-                this.classList.add('bg-pizza-red', 'hover:bg-red-700');
-                this.classList.remove('bg-green-500', 'hover:bg-green-600');
-            }, 2000);
-            
-            console.log(`Pizza ${pizzaName} aggiunta al carrello per €${pizzaPrice}`);
+
+    // Enhanced form validation with better accessibility
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            if (!validateForm(form)) {
+                e.preventDefault();
+                showNotification('Per favore completa tutti i campi obbligatori', 'error');
+            }
         });
     });
-    
-    // Form validation
-    const contactForm = document.querySelector('#contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
-            
-            // Simple validation
-            if (!data.name || !data.email || !data.message) {
-                alert('Per favore compila tutti i campi obbligatori.');
-                return;
-            }
-            
-            // Simulate form submission
-            const submitButton = contactForm.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerHTML;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Invio...';
-            submitButton.disabled = true;
-            
-            setTimeout(() => {
-                submitButton.innerHTML = '<i class="fas fa-check mr-2"></i>Inviato!';
-                submitButton.classList.remove('bg-pizza-red', 'hover:bg-red-700');
-                submitButton.classList.add('bg-green-500', 'hover:bg-green-600');
-                
-                setTimeout(() => {
-                    contactForm.reset();
-                    submitButton.innerHTML = originalText;
-                    submitButton.classList.add('bg-pizza-red', 'hover:bg-red-700');
-                    submitButton.classList.remove('bg-green-500', 'hover:bg-green-600');
-                    submitButton.disabled = false;
-                }, 2000);
-            }, 1000);
-        });
-    }
-    
-    // Order now button functionality
-    const orderNowButtons = document.querySelectorAll('.order-now-btn');
-    orderNowButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Scroll to menu section
-            const menuSection = document.querySelector('#menu');
-            if (menuSection) {
-                menuSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+
+    // Add keyboard support for category filters
+    document.querySelectorAll('.category-filter').forEach(button => {
+        button.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
             }
         });
     });
 });
 
-// Utility functions
-const PizzaUtils = {
-    // Format currency
-    formatCurrency: (amount) => {
-        return new Intl.NumberFormat('it-IT', {
-            style: 'currency',
-            currency: 'EUR'
-        }).format(amount);
-    },
-    
-    // Calculate delivery time
-    calculateDeliveryTime: () => {
-        const minTime = 25;
-        const maxTime = 45;
-        const randomTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-        return randomTime;
-    },
-    
-    // Check if store is open
-    isStoreOpen: () => {
-        const now = new Date();
-        const currentHour = now.getHours();
-        const currentDay = now.getDay();
-        
-        // Store is open from 18:00 to 23:00, closed on Sunday evening
-        if (currentDay === 0 && currentHour >= 18) return false; // Sunday evening
-        if (currentHour >= 18 && currentHour < 23) return true;
-        return false;
+// Cart Management
+function addToCart(pizzaId, pizzaName, price = 0) {
+    if (pizzaCart) {
+        pizzaCart.addItem(pizzaId, pizzaName, price);
+    } else {
+        console.warn('Cart not initialized');
     }
-};
+}
 
-// Expose to global scope if needed
-window.PizzaUtils = PizzaUtils;
+function showNotification(message, type = 'success') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-300 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        }`;
+    notification.textContent = message;
+    notification.setAttribute('role', 'alert');
+    notification.setAttribute('aria-live', 'assertive');
 
-// Initialize store status
-document.addEventListener('DOMContentLoaded', function() {
-    const storeStatus = document.querySelector('#store-status');
-    if (storeStatus) {
-        const isOpen = PizzaUtils.isStoreOpen();
-        storeStatus.innerHTML = isOpen ? 
-            '<i class="fas fa-circle text-green-500 mr-2"></i>Aperto' : 
-            '<i class="fas fa-circle text-red-500 mr-2"></i>Chiuso';
+    document.body.appendChild(notification);
+
+    // Remove after 5 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+function updateCartCount() {
+    if (pizzaCart) {
+        pizzaCart.updateCartDisplay();
     }
-});
+}
+
+// Enhanced form validation with better accessibility
+function validateForm(form) {
+    const requiredInputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+    let isValid = true;
+    const invalidInputs = [];
+
+    requiredInputs.forEach(input => {
+        // Remove previous error styling
+        input.classList.remove('border-red-500', 'ring-red-500');
+
+        if (!input.value.trim()) {
+            isValid = false;
+            invalidInputs.push(input);
+            input.classList.add('border-red-500');
+
+            // Add error message if not already present
+            const errorId = input.id + '-error';
+            let errorElement = document.getElementById(errorId);
+
+            if (!errorElement) {
+                errorElement = document.createElement('div');
+                errorElement.id = errorId;
+                errorElement.className = 'text-red-500 text-sm mt-1';
+                errorElement.textContent = 'Questo campo è obbligatorio';
+                errorElement.setAttribute('aria-live', 'polite');
+
+                // Insert error message after the input
+                input.parentNode.insertBefore(errorElement, input.nextSibling);
+            }
+        } else {
+            // Remove error message if field is valid
+            const errorId = input.id + '-error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.remove();
+            }
+        }
+    });
+
+    if (!isValid && invalidInputs.length > 0) {
+        // Focus the first invalid input
+        invalidInputs[0].focus();
+    }
+
+    return isValid;
+}
+
+// Utility function to format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('it-IT', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(amount);
+}
+
+// Accessibility utility: Add skip link for screen readers
+function addSkipLink() {
+    const skipLink = document.createElement('a');
+    skipLink.href = '#main-content';
+    skipLink.textContent = 'Salta al contenuto principale';
+    skipLink.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-black focus:p-4 focus:rounded';
+    skipLink.setAttribute('aria-label', 'Salta al contenuto principale');
+
+    document.body.insertBefore(skipLink, document.body.firstChild);
+}
+
+// Initialize skip link when DOM is loaded
+document.addEventListener('DOMContentLoaded', addSkipLink);

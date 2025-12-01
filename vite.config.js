@@ -1,41 +1,37 @@
-import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'path';
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import tailwindcss from '@tailwindcss/vite'
+
+import path from 'path';
 
 export default defineConfig({
-    root: resolve(__dirname, 'resources/html'),
     plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+            ],
+            refresh: true,
+
+        }),
         tailwindcss(),
     ],
     build: {
-        outDir: resolve(__dirname, 'resources/html/dist'),
-        emptyOutDir: true,
-        manifest: false,
+        outDir: './public',
+        emptyOutDir: false,
+        manifest: 'manifest.json',
+        /*
         rollupOptions: {
-            input: {
-                main: resolve(__dirname, 'resources/html/index.html'),
-            },
-            output: {
-                entryFileNames: 'js/[name].js',
-                chunkFileNames: 'js/[name].js',
-                assetFileNames: (assetInfo) => {
-                    if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-                        return 'css/[name].[ext]';
-                    }
-                    return 'assets/[name].[ext]';
-                }
-            }
-        }
+            input: [
+                path.resolve(__dirname, 'resources/css/app.css'),
+                path.resolve(__dirname, 'resources/js/app.js'),
+            ],
+        },
+        */
     },
     resolve: {
         alias: {
-            '@': resolve(__dirname, 'resources'),
+            '@': '/resources/js',
         },
     },
-    server: {
-        cors: true,
-        port: 5173,
-        open: true,
-    },
-    publicDir: 'public',
 });

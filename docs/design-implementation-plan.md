@@ -7,6 +7,23 @@ Adattare il design elegante di laravelpizza.com (community meetup) al nostro sis
 
 ## 📊 Analisi Design Originale
 
+### Diff tra stato attuale (01c) e target laravelpizza.com (01b)
+
+- **Tema colore**
+  - 01c: background bianco, icona blu generica, layout da software HR.
+  - 01b: background dark `bg-slate-950` con gradient, accenti rossi brand Laravel Pizza Meetups.
+- **Branding & header**
+  - 01c: nessun brand "Laravel Pizza Meetups", nessuna navbar sticky in alto.
+  - 01b: navbar sticky con logo pizza, testo "Laravel Pizza Meetups" e link `Events`, `Community Chat`, `Login`, `Sign Up`.
+- **Hero**
+  - 01c: titolo "Funzionalità Principali" e sezione "Gestione Dipendenti" con grande icona blu.
+  - 01b: heading tipografico "Laravel Developers. Pizza. Community." con CTA principali centrali.
+- **Sezioni sottostanti**
+  - 01c: contenuto verticale semplice, senza griglia features.
+  - 01b: sezione "Why Join Our Community?" con 4 feature card (Regular Meetups, Growing Community, Multiple Locations, Real-time Chat).
+
+Queste differenze guidano il lavoro di migrazione: dobbiamo portare header, hero e griglia features del design 01b dentro i Blade/JSON del tema Meetup, usando il design system Tailwind già definito.
+
 ### Elementi Design da Mantenere
 1. **Dark Theme Elegante**: Background scuro (`rgb(2, 8, 23)`) con testo chiaro
 2. **Navigation Sticky**: Con backdrop blur e semi-trasparenza

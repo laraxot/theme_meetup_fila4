@@ -41,6 +41,21 @@ Themes/Meetup/
 
 ## 🚀 Setup
 
+### ⚠️ REGOLA CRITICA: Esecuzione Comandi NPM
+
+**I comandi NPM DEVONO essere eseguiti SEMPRE nella directory del tema:**
+
+```bash
+cd /var/www/_bases/base_laravelpizza/laravel/Themes/Meetup
+```
+
+**Perché?**
+- `vite.config.js` usa `__dirname` per risolvere path relativi
+- `package.json` deve essere nella directory corrente
+- `node_modules` viene creato nella directory corrente
+
+Vedi [Regola Esecuzione Comandi NPM](./docs/npm-commands-execution-rule.md) per dettagli.
+
 ### Installazione Dipendenze
 
 ```bash
@@ -51,6 +66,7 @@ npm install
 ### Sviluppo
 
 ```bash
+cd /var/www/_bases/base_laravelpizza/laravel/Themes/Meetup
 # Avvia dev server Vite con hot reload
 npm run dev
 ```
@@ -58,11 +74,12 @@ npm run dev
 ### Build Produzione
 
 ```bash
+cd /var/www/_bases/base_laravelpizza/laravel/Themes/Meetup
 # Compila assets per produzione
 npm run build
 ```
 
-Gli assets compilati verranno salvati in `public/build-meetup/`.
+Gli assets compilati verranno salvati in `resources/html/dist/`.
 
 ## 🎨 Palette Colori
 

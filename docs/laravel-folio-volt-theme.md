@@ -8,21 +8,21 @@ This document provides specific guidance for implementing Laravel Folio and Volt
 
 ### Frontend Route Structure
 
-The Meetup theme utilizes Laravel Folio for all public-facing routes, organized as follows:
+The Meetup theme utilizes Laravel Folio for all public-facing routes, organized within the modular structure as follows. The routing is automatically handled by `Modules\Cms\Providers\FolioVoltServiceProvider`.
 
 ```
 Themes/Meetup/resources/views/
-├── pages/                    # Public-facing pages
-│   ├── index.blade.php       # Home page - / (fallback)
+├── pages/                    # Public-facing pages (Folio routes)
+│   ├── index.blade.php       # Home page - / (localized: /en/, /it/, etc.)
 │   ├── events/
-│   │   ├── index.blade.php   # Event listing - /events
-│   │   └── [event].blade.php # Event detail - /events/{event}
+│   │   ├── index.blade.php   # Event listing - /events (localized: /en/events, etc.)
+│   │   └── [event].blade.php # Event detail - /events/{event} (localized: /en/events/{event}, etc.)
 │   ├── profile/
-│   │   └── [user].blade.php  # User profile - /profile/{user}
-│   ├── dashboard.blade.php   # User dashboard - /dashboard
-│   ├── chat.blade.php        # Community chat - /chat
-│   ├── login.blade.php       # Login page - /login
-│   └── register.blade.php    # Registration - /register
+│   │   └── [user].blade.php  # User profile - /profile/{user} (localized: /en/profile/{user}, etc.)
+│   ├── dashboard.blade.php   # User dashboard - /dashboard (localized: /en/dashboard, etc.)
+│   ├── chat.blade.php        # Community chat - /chat (localized: /en/chat, etc.)
+│   ├── login.blade.php       # Login page - /login (localized: /en/login, etc.)
+│   └── register.blade.php    # Registration - /register (localized: /en/register, etc.)
 ├── components/               # Reusable Volt/Livewire components
 │   ├── event-card.blade.php
 │   ├── navigation.blade.php
@@ -30,6 +30,26 @@ Themes/Meetup/resources/views/
 └── layouts/                  # Theme layouts
     └── app.blade.php
 ```
+
+### Routing Registration
+
+The routing for these theme pages is automatically handled by the `Modules\Cms\Providers\FolioVoltServiceProvider`, which scans and registers all pages from the theme's pages directory:
+
+```php
+// In Modules/Cms/Providers/FolioVoltServiceProvider.php
+$theme_path = XotData::make()->getPubThemeViewPath('pages');
+if (File::exists($theme_path) && File::isDirectory($theme_path)) {
+    Folio::path($theme_path)
+        ->uri($locale)  // Adds locale prefix like /en/, /it/, etc.
+        ->middleware([
+            '*' => $base_middleware,
+        ]);
+}
+```
+
+### Modular Integration
+
+This approach allows the Meetup theme to have its own dedicated pages while integrating seamlessly with the modular architecture. The same service provider also registers pages from modules like Meetup, allowing for a unified routing system across both themes and modules.
 
 ### Integration with Laravel Pizza Branding
 

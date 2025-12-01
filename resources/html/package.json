@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy": "mkdir -p ../../../public_html/themes/Meetup && cp -r ./dist/* ../../../public_html/themes/Meetup"
   },
   "devDependencies": {
     "axios": "^1.11.0",

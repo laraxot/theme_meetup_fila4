@@ -98,3 +98,88 @@ Questo documento raccoglie **case study reali** di applicazioni costruite con **
   - usare Volt dove servono **azioni dell'utente in tempo reale** (login, registrazione evento, chat, dashboard, multi‑step forms).
 
 Queste recensioni completano le linee guida tecniche in `folio-volt-best-practices.md` e aiutano a prendere decisioni di design concrete per le pagine future (dashboard, profile, event detail, forms guidati).
+
+---
+
+## 6. Genesis starter kit (DevDojo) – focus tema
+
+- **Cosa è**: uno starter kit TALL (Tailwind, Alpine, Laravel, Livewire) che integra **Folio + Volt** e fornisce già:
+  - home marketing,
+  - pagina `about`,
+  - flusso auth completo (login, register, reset/verify),
+  - dashboard,
+  - pagina profilo `profile/edit`,
+  - pagina "learn" con documentazione.
+
+### Pattern UI/UX rilevanti
+
+- **Home marketing**
+  - hero grande con call‑to‑action chiara,
+  - sezioni a blocchi (benefit, feature, call‑to‑action secondaria).
+- **Layout auth**
+  - pagine login/register minimal, centrati, con card su sfondo scuro chiaro,
+  - messaggi di errore/validazione integrati nel form.
+- **Dashboard**
+  - struttura pulita pronta per ospitare cards, tabelle e widget Livewire/Volt.
+- **Profile edit**
+  - sezioni distinte per dati profilo, password, cancellazione account.
+
+### Idee riusabili per il tema Meetup
+
+- Usare Genesis come **riferimento visivo** quando porteremo login, register, dashboard e profile da HTML statico a Folio + Volt:
+  - mantenere una **home marketing** forte (come la nostra `index.html`) ma con la stessa chiarezza di Genesis.
+  - per le **pagine auth**, replicare la semplicità di layout: card centrale, poche distrazioni, testo chiaro.
+  - per **dashboard** e **profile**, seguire l'idea di layout modulare: blocchi separati (stats, eventi, impostazioni) che possono diventare componenti Volt o Filament.
+- Conferma anche lato tema che la combinazione **Blade layout + Folio pages + Volt per le parti dinamiche** è uno standard de‑facto, che possiamo tranquillamente seguire per Laravel Pizza Meetups.
+
+## 7. Warriorfolio 2 – focus tema/UI
+
+- **Cosa è**: piattaforma portfolio + blog moderna costruita con **Laravel + Filament + Livewire + Tailwind + Alpine**.
+- È pensata per creare siti personali/professionali con:
+  - portfolio progetti,
+  - blog,
+  - pagine marketing,
+  - gestione contenuti completamente via pannello Filament.
+
+### Pattern UI/UX rilevanti
+
+- **Saturn UI / Juno Theme**
+  - interfacce moderne con molto uso di card, tab, e layout a colonne,
+  - dark/light mode con inversione tema.
+- **Portfolio gallery**
+  - griglie di progetti con filtri rapidi e quick view,
+  - focus su immagini di impatto e micro‑dettagli (tags, categoria, ruolo).
+- **Blog & search**
+  - layout leggibile (titolo grande, meta info, reading time),
+  - ricerca veloce con debounce e filtri.
+- **Dashboard/admin**
+  - widgets, quickbar, accesso rapido a sezioni frequenti.
+
+### Idee riusabili per il tema Meetup
+
+- **Pagina eventi come portfolio**
+  - usare la stessa logica di gallery per la pagina eventi: card evento con tag (città, tipo meetup, livello),
+  - filtri rapidi in alto (città, data, tema),
+  - eventuale quick view con info principali.
+- **Blog meetup / articoli**
+  - layout articoli ispirato al blog di Warriorfolio (grande tipografia, meta chiare), utile per recap meetup, annunci, guide.
+- **Tema dark con accenti chiari**
+  - molte scelte di Warriorfolio si sposano bene con il nostro stile dark rosso Laravel Pizza:
+    - card con bordo/ombra leggera,
+    - contenuti ben separati in sezioni,
+    - uso consistente di icone e badge per evidenziare info.
+
+Questi spunti, insieme a quelli di Genesis, ci danno una base solida per disegnare il tema Meetup come **ibrido tra landing marketing, portfolio eventi e blog di community**, con Filament che gestisce i contenuti e Folio + Volt che li espongono nel frontoffice.
+
+## 8. Altri progetti Folio + Volt – UI/UX
+
+- **Siti SaaS / dashboard**  
+  I template Folio+Volt orientati al B2B (b2bsaas*, mini‑CRM) mostrano dashboard con navigazione chiara, sidebar persistente e contenuti principali in card/tabelle. Questo si traduce bene nella futura dashboard Meetup (statistiche eventi, lista iscrizioni, quick actions).
+- **Portfolio e siti personali**  
+  Progetti come GothamFolio confermano l'efficacia di layout a sezioni verticali (hero, about, skills, portfolio, contatti) con forte tipografia e uso di gradienti/ombre leggere. La pagina eventi può adottare la stessa logica, sostituendo i progetti con meetup.
+- **Podcast / media**  
+  I player podcast Folio+Volt usano barre fisse (bottom bar) e componenti compatti per controlli play/pause, timeline, cover. Questo pattern è riusabile per eventuali "recent talks" o highlight multimediali di meetup.
+- **Starter kit e boilerplate**  
+  Starter come vflat, starter nativephp, personalized starter kit mostrano come strutturare il tema con layout coerenti (frontend/app), componenti UI piccoli e riutilizzabili e una gerarchia chiara delle pagine.
+
+L'insieme di questi esempi conferma le nostre scelte per il tema Meetup: interfaccia a blocchi, navigazione semplice, uso di Volt solo dove serve vera interazione (forms, filtri, player), mantenendo Blade + Tailwind per tutto il resto.

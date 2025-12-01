@@ -4,9 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
     plugins: [
-        tailwindcss({
-            content: ['./*.html', './**/*.html'],
-        }),
+        tailwindcss(),
     ],
     server: {
         port: 5173,

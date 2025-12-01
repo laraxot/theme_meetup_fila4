@@ -438,10 +438,359 @@ public function test_events_page_shows_events(): void
 }
 ```
 
+## Advanced Patterns from Genesis, Laravel News & Warriorfolio
+
+### 1. Genesis Authentication Patterns
+
+The Genesis starter kit provides comprehensive authentication implementations:
+
+#### Login Component with Security
+```blade
+@volt('login')
+    @php
+        use App\Models\User;
+        use Illuminate\Auth\Events\Login;
+        
+        middleware(['guest']); // Ensure only guests can access
+        
+        $email = '';
+        $password = '';
+        $remember = false;
+    @endphp
+
+    $authenticate = function() {
+        $credentials = $this->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        
+        if (!auth()->attempt($credentials, $this->remember)) {
+            $this->addError('email', __('auth.failed'));
+            return;
+        }
+        
+        // Fire login event for tracking
+        event(new Login(
+            auth()->guard('web'), 
+            User::where('email', $this->email)->first(), 
+            $this->remember
+        ));
+        
+        return redirect()->intended('/');
+    };
+@endvolt
+```
+
+#### Registration with Validation
+```blade
+@volt('register')
+    @php
+        use Modules\Meetup\Actions\User\RegisterUserAction;
+        
+        middleware(['guest']);
+        
+        $name = '';
+        $email = '';
+        $password = '';
+        $passwordConfirmation = '';
+    @endphp
+
+    $register = function() {
+        $validated = $this->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $action = app(RegisterUserAction::class);
+        $result = $action->execute($validated);
+
+        if ($result->success) {
+            auth()->login($result->user);
+            return redirect('/dashboard');
+        } else {
+            $this->addError('general', $result->message);
+        }
+    };
+@endvolt
+```
+
+### 2. Laravel News SPA-like Experience
+
+Implement persistent components and smooth navigation using `@persist` and `wire:navigate`:
+
+#### Layout with Persistent Elements
+```blade
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ $title ?? 'Laravel Pizza Meetups' }}</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen bg-gray-50">
+    @persist('header')
+        <x-layouts.header />
+    @endpersist
+    
+    <main class="py-8">
+        {{ $slot }}
+    </main>
+    
+    @persist('chat-widget')
+        <x-chat.widget />
+    @endpersist
+    
+    @persist('event-notifications')
+        <x-event.notifications />
+    @endpersist
+</body>
+</html>
+```
+
+#### SPA-like Navigation Links
+```blade
+{{-- Use wire:navigate for smooth page transitions --}}
+<a href="/events" wire:navigate class="text-gray-600 hover:text-red-600 transition-colors">
+    Events
+</a>
+
+<a href="/dashboard" wire:navigate class="text-gray-600 hover:text-red-600 transition-colors">
+    Dashboard
+</a>
+
+<a href="/profile" wire:navigate class="text-gray-600 hover:text-red-600 transition-colors">
+    Profile
+</a>
+```
+
+### 3. Warriorfolio's Modular Architecture
+
+Implement modular, reusable components following Warriorfolio's approach:
+
+#### Modular Event Components
+```blade
+{{-- resources/views/components/event/gallery.blade.php --}}
+@props(['events', 'categories' => [], 'showFilters' => true])
+
+<div class="event-gallery">
+    @if($showFilters)
+        <x-event.filters :categories="$categories" />
+    @endif
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($events as $event)
+            <x-event.card 
+                :event="$event" 
+                :show-registration-status="auth()->check()" 
+            />
+        @endforeach
+    </div>
+    
+    @if($events->hasPages())
+        <div class="mt-8">
+            {{ $events->links() }}
+        </div>
+    @endif
+</div>
+```
+
+#### Content Block System
+```blade
+{{-- resources/views/components/page-builder/blocks.blade.php --}}
+@props(['contentBlocks'])
+
+@foreach($contentBlocks as $block)
+    @switch($block['type'])
+        @case('hero-section')
+            <x-content-blocks.hero :data="$block['data']" />
+            @break
+        @case('events-grid')
+            <x-content-blocks.events-grid :data="$block['data']" />
+            @break
+        @case('speakers-list')
+            <x-content-blocks.speakers :data="$block['data']" />
+            @break
+        @case('sponsors-grid')
+            <x-content-blocks.sponsors :data="$block['data']" />
+            @break
+        @case('call-to-action')
+            <x-content-blocks.cta :data="$block['data']" />
+            @break
+        @default
+            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded">
+                <p class="text-yellow-800">Unknown content block: {{ $block['type'] }}</p>
+            </div>
+    @endswitch
+@endforeach
+```
+
+### 4. Advanced Communication Patterns
+
+Implement cross-component communication as demonstrated in Laravel News:
+
+#### Event-based Communication
+```blade
+{{-- resources/views/components/chat/widget.blade.php --}}
+<div 
+    x-data="{ 
+        showChat: false, 
+        toggle() { this.showChat = !this.showChat; },
+        openWithUser(user) { 
+            this.showChat = true;
+            $dispatch('chat-opened-with-user', user);
+        }
+    }"
+    x-on:open-chat-with-user.window="openWithUser($event.detail)"
+    class="fixed bottom-4 right-4"
+>
+    <button @click="toggle" class="bg-red-600 text-white p-3 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+    </button>
+    
+    <div x-show="showChat" class="absolute bottom-16 right-0 w-80 h-96 bg-white border rounded-lg shadow-lg">
+        <x-chat.interface />
+    </div>
+</div>
+```
+
+#### Dispatching Events from Volt Components
+```blade
+@volt('event-detail')
+    $contactSpeaker = function($speakerId) {
+        $this->dispatch('open-chat-with-user', [
+            'userId' => $speakerId,
+            'type' => 'speaker'
+        ]);
+    };
+    
+    $contactOrganizer = function($organizerId) {
+        $this->dispatch('open-chat-with-user', [
+            'userId' => $organizerId,
+            'type' => 'organizer'
+        ]);
+    };
+@endvolt
+
+<button 
+    wire:click="contactSpeaker({{ $event->organizer->id }})"
+    class="bg-blue-600 text-white px-4 py-2 rounded"
+>
+    Contact Speaker
+</button>
+```
+
+### 5. Advanced Routing Patterns
+
+Leverage Folio's advanced routing capabilities:
+
+#### Route Model Binding with Custom Keys
+```blade
+{{-- resources/views/pages/events/[Event:slug].blade.php --}}
+{{-- Creates route /events/{slug} with automatic model binding --}}
+
+{{-- resources/views/pages/events/[event]/sessions/[EventSession:id].blade.php --}}
+{{-- Creates route /events/{event}/sessions/{id} with multiple model bindings --}}
+```
+
+#### Middleware in Pages
+```blade
+{{-- resources/views/pages/dashboard.blade.php --}}
+<?php
+use function Laravel\Folio\middleware;
+
+middleware(['auth', 'verified']);
+?>
+
+<x-layout>
+    <!-- Dashboard content -->
+</x-layout>
+```
+
+## Best Practices for Laravel Pizza Meetups Implementation
+
+Based on all these real-world examples, here are specific implementation patterns for Laravel Pizza Meetups:
+
+### 1. Authentication & User Management
+```blade
+{{-- Following Genesis patterns --}}
+@volt('auth.login')
+    middleware(['guest']);
+    
+    $email = '';
+    $password = '';
+    $remember = false;
+    
+    $login = function() {
+        $credentials = $this->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        
+        if (auth()->attempt($credentials, $this->remember)) {
+            return redirect()->intended('/dashboard');
+        }
+        
+        $this->addError('email', 'Invalid credentials');
+    };
+@endvolt
+```
+
+### 2. Event Management with SPA Experience
+```blade
+{{-- Using Laravel News patterns for persistent elements --}}
+@volt('event-registration')
+    $registerForEvent = function() {
+        if (!$this->user) {
+            return redirect('/login?redirect=' . request()->fullUrl());
+        }
+        
+        // Registration logic
+        $this->dispatch('event-registered', $this->event->id);
+    };
+    
+    $unregisterFromEvent = function() {
+        // Unregistration logic
+        $this->dispatch('event-unregistered', $this->event->id);
+    };
+@endvolt
+```
+
+### 3. Modular Component Architecture
+```blade
+{{-- Following Warriorfolio patterns --}}
+@volt('event.gallery')
+    $events = computed(function() {
+        return \Modules\Meetup\Models\Event::with(['organizer', 'venue'])
+            ->where('published', true)
+            ->orderBy('start_date', 'desc')
+            ->paginate(12);
+    });
+    
+    $filters = [
+        'categories' => ['laravel', 'filament', 'livewire', 'php'],
+        'formats' => ['online', 'in-person', 'hybrid'],
+        'dates' => ['upcoming', 'past', 'this-month']
+    ];
+@endvolt
+
+<x-event.gallery 
+    :events="$this->events" 
+    :filters="$this->filters" 
+    :show-filters="true" 
+/>
+```
+
 ## Conclusion
 
-These real-world implementation patterns demonstrate that Folio + Volt provide a robust foundation for building modern Laravel applications. The Laravel Pizza Meetups project can leverage these patterns to create:
+These real-world implementation patterns from Genesis, Laravel News, and Warriorfolio demonstrate that Folio + Volt provide a robust foundation for building modern Laravel applications. The Laravel Pizza Meetups project can leverage these patterns to create:
 
+- Production-ready authentication systems (Genesis)
+- SPA-like user experience with persistent components (Laravel News) 
+- Modular and reusable component architecture (Warriorfolio)
+- Advanced routing and state management patterns
+- Cross-component communication strategies
 - Efficient, maintainable code structures
 - Responsive, interactive user interfaces
 - Secure and performant applications

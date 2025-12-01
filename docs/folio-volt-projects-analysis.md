@@ -9,6 +9,36 @@ Analisi dettagliata di progetti reali che utilizzano Folio + Volt, con focus su 
 
 ---
 
+## 📚 Repository Analizzati (2025-11-29)
+
+### Repository Principali Studiati
+
+1. **jasonlbeggs/laravel-news-volt-folio-example** - Esempio tutorial Laravel News
+2. **benjamincrozat/dummy-store** - Demo e-commerce per Laracasts
+3. **mfugissecruz/podcast-player** - Tutorial completo Folio + Volt
+4. **Altri 17 repository** - Vedi [Analisi Completa Repository](../../../Modules/Meetup/docs/folio-volt-repositories-analysis.md)
+
+### Pattern Comuni Identificati
+
+#### Routing (Folio)
+- Struttura file-based: `resources/views/pages/`
+- Routing nested: `pages/episodes/[slug].blade.php`
+- Route model binding automatico
+- Nessun `routes/web.php` per frontoffice
+
+#### Componenti (Volt)
+- `@volt('component-name')` direttamente nelle pagine
+- SPA mode con `wire:navigate` e `@persist`
+- Form handling senza controller
+- State management inline
+
+#### Architettura
+- Frontoffice: Folio + Volt + Actions
+- Backend: Filament
+- Pattern: Request → Folio → Blade → Volt → Action → Service
+
+---
+
 ## 🎨 Progetti Analizzati per UI/UX
 
 ### 1. Volt Laravel Dashboard - Themesberg
@@ -83,6 +113,114 @@ Analisi dettagliata di progetti reali che utilizzano Folio + Volt, con focus su 
 - ✅ **Event Registration**: Pattern semplice per registrazione
 - ✅ **User Dashboard**: Lista eventi registrati
 - ✅ **Minimal UI**: Applicabile a pagine semplici
+
+### 4. WarriorFolio - Marcos Coelho
+
+**⚠️ IMPORTANTE**: Questo progetto **NON usa Folio + Volt**. Usa Livewire tradizionale, Filament e routing tradizionale.
+
+**Focus**: Architettura modulare, organizzazione componenti, Filament admin panel
+
+#### Stack Tecnologico
+- **Laravel**: Framework PHP
+- **Livewire**: Componenti reattivi (tradizionale, non Volt)
+- **Filament**: Admin panel
+- **Tailwind CSS**: Utility-first CSS
+- **Alpine.js**: JavaScript framework
+- **Routing**: Tradizionale (`routes/web.php`)
+
+#### Architettura Identificata
+1. **Organizzazione Componenti**:
+   ```
+   app/
+   ├── Livewire/          # Componenti Livewire tradizionali
+   │   ├── Blog/
+   │   ├── Mail/
+   │   ├── Portfolio/
+   │   └── Alert.php, DarkMode.php, etc.
+   └── View/Components/    # Componenti Blade
+       ├── Blog/
+       ├── Core/
+       ├── Themes/
+       └── Ui/
+   ```
+
+2. **Struttura Views**:
+   ```
+   resources/views/
+   ├── components/        # Componenti Blade riutilizzabili
+   ├── layouts/           # Layout principali
+   ├── livewire/          # Viste Livewire
+   └── filament/          # Viste Filament custom
+   ```
+
+3. **Modular Architecture**:
+   - Componenti organizzati per dominio (Blog, Portfolio, Mail)
+   - Separazione tra componenti UI e componenti Livewire
+   - Componenti Core per funzionalità base
+   - Componenti Themes per temi personalizzabili
+
+#### Pattern Utili (Non Folio/Volt, ma Applicabili)
+1. **Organizzazione Componenti per Dominio**:
+   - Separazione componenti per feature (Blog, Portfolio, Mail)
+   - Componenti Core per funzionalità base
+   - Componenti UI riutilizzabili
+
+2. **Filament Integration**:
+   - Admin panel completo
+   - Resource management
+   - Custom pages e widgets
+
+3. **Livewire Component Organization**:
+   - Componenti organizzati in namespace
+   - Separazione logica per feature
+   - Componenti riutilizzabili (Alert, DarkMode, Newsletter)
+
+4. **Blade Component System**:
+   - Componenti organizzati in cartelle per dominio
+   - Componenti Core per layout base
+   - Componenti Themes per personalizzazione
+
+#### Applicabilità Tema Meetup (Pattern Generali)
+- ✅ **Organizzazione Componenti**: Pattern per organizzare componenti per dominio
+- ✅ **Filament Admin**: Esempio di integrazione Filament per admin panel
+- ✅ **Livewire Organization**: Pattern per organizzare componenti Livewire
+- ✅ **Modular Architecture**: Approccio modulare per componenti
+
+#### ⚠️ Differenze Chiave con Folio + Volt
+1. **Routing**:
+   - WarriorFolio: `routes/web.php` tradizionale
+   - Folio: File-based routing (pagine in `resources/views/pages/`)
+
+2. **Componenti**:
+   - WarriorFolio: Livewire class-based components
+   - Volt: Single-file components con `@volt`
+
+3. **Architettura**:
+   - WarriorFolio: Controller → View → Livewire Component
+   - Folio + Volt: Folio Page → Volt Component → Action
+
+#### Lezioni Apprese (Non Specifiche Folio/Volt)
+1. **Organizzazione Componenti**:
+   - Separare componenti per dominio/funzionalità
+   - Creare componenti Core riutilizzabili
+   - Organizzare componenti UI separatamente
+
+2. **Filament Integration**:
+   - Usare Filament per admin panel
+   - Creare resource personalizzati
+   - Custom widgets e pages
+
+3. **Modular Design**:
+   - Architettura modulare per scalabilità
+   - Separazione concerns
+   - Componenti riutilizzabili
+
+#### ⚠️ Note Importanti
+- **NON è un esempio di Folio + Volt**
+- Utile per vedere pattern di organizzazione componenti
+- Utile per vedere integrazione Filament
+- Utile per vedere architettura modulare
+- **NON seguire il pattern routing** (usa Folio invece)
 
 ---
 

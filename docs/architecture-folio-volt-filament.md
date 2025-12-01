@@ -27,33 +27,70 @@
 
 ### Directory Pages (Folio)
 
+In the modular Laravel Pizza architecture, Folio pages can be organized in both theme and module directories. The actual routing is handled by `Modules\Cms\Providers\FolioVoltServiceProvider`.
+
+#### Theme-Specific Pages (Recommended for Meetup Theme)
 ```
-resources/views/pages/
+Themes/Meetup/resources/views/pages/
+├── index.blade.php                 # Homepage → / (localized: /en/, /it/, etc.)
+├── about.blade.php                 # Chi Siamo → /about (localized: /en/about, /it/about, etc.)
+├── contact.blade.php               # Contatti → /contact (localized: /en/contact, etc.)
+├── events/index.blade.php          # Eventi list → /events (localized: /en/events, etc.)
+└── events/[event].blade.php        # Evento detail → /events/{event} (localized: /en/events/{event}, etc.)
+```
+
+#### Module-Specific Pages (For Meetup Module Backend)
+```
+Modules/Meetup/Resources/views/pages/
+├── admin/index.blade.php           # Admin dashboard → /admin (if needed)
+└── api/[endpoint].blade.php        # API endpoints → /api/{endpoint} (if needed as Folio pages)
+```
+
+### Routing Registration
+
+The routing for both theme and module pages is automatically registered by the `FolioVoltServiceProvider`:
+
+```php
+// In Modules/Cms/Providers/FolioVoltServiceProvider.php
+public function boot(): void
+{
+    // Theme pages
+    $theme_path = XotData::make()->getPubThemeViewPath('pages');
+    if (File::exists($theme_path) && File::isDirectory($theme_path)) {
+        Folio::path($theme_path)
+            ->uri($locale)  // Adds locale prefix
+            ->middleware(['*' => $base_middleware]);
+    }
+
+    // Module pages
+    foreach (Module::all() as $module) {
+        $path = $module->getPath().'/resources/views/pages';
+        if (File::exists($path) && File::isDirectory($path)) {
+            Folio::path($path)
+                ->uri($locale)  // Adds locale prefix
+                ->middleware(['*' => $base_middleware]);
+        }
+    }
+}
+```
+
+### File Structure for Laravel Pizza Meetups
+
+For the Meetup theme specifically, organize your pages as:
+
+```
+Themes/Meetup/resources/views/pages/
 ├── index.blade.php                 # Homepage → /
-├── menu.blade.php                  # Menu → /menu
-├── about.blade.php                 # Chi Siamo → /about
-├── contact.blade.php               # Contatti → /contact
-├── cart.blade.php                  # Carrello → /cart
-├── checkout.blade.php              # Checkout → /checkout
-│
-├── auth/
-│   ├── login.blade.php             # Login → /auth/login
-│   └── register.blade.php          # Register → /auth/register
-│
-├── menu/
-│   └── [slug].blade.php            # Pizza detail → /menu/{slug}
-│
-├── events/
-│   ├── index.blade.php             # Eventi list → /events
-│   └── [slug].blade.php            # Evento detail → /events/{slug}
-│
-├── dashboard/
-│   ├── index.blade.php             # Dashboard → /dashboard
-│   └── profile.blade.php           # Profile → /dashboard/profile
-│
-└── blog/
-    ├── index.blade.php             # Blog list → /blog
-    └── [slug].blade.php            # Post → /blog/{slug}
+├── about.blade.php                 # About → /about
+├── events/index.blade.php          # Events list → /events
+├── events/[event].blade.php        # Event detail → /events/{event}
+├── events/[event]/register.blade.php # Event registration → /events/{event}/register
+├── login.blade.php                 # Login → /login
+├── register.blade.php              # Register → /register
+├── dashboard/index.blade.php       # Dashboard → /dashboard
+├── dashboard/profile.blade.php     # Profile → /dashboard/profile
+├── dashboard/events.blade.php      # User's events → /dashboard/events
+└── chat.blade.php                  # Community chat → /chat
 ```
 
 ### Routing Automatico (Folio)

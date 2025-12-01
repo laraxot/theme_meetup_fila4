@@ -81,6 +81,26 @@ This document outlines a strategic plan to bring the Laravel Pizza Meetups proje
 
 ---
 
+## Laraxot Development Principles
+
+This project adheres to the following core development principles, collectively referred to as "Laraxot" (Laravel + Xot module methodology):
+
+*   **DRY (Don't Repeat Yourself):** Avoid redundant code. Favor reusable components, functions, and abstractions.
+*   **KISS (Keep It Simple, Stupid):** Prioritize simplicity and clarity in design and implementation. Avoid unnecessary complexity.
+*   **SOLID Principles:**
+    *   **S**ingle Responsibility Principle: Each class or module should have one, and only one, reason to change.
+    *   **O**pen/Closed Principle: Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
+    *   **L**iskov Substitution Principle: Objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program.
+    *   **I**nterface Segregation Principle: Clients should not be forced to depend on interfaces they do not use.
+    *   **D**ependency Inversion Principle: Depend upon abstractions, not concretions.
+*   **Robustness:** Build resilient applications that handle errors gracefully, validate input thoroughly, and provide a stable user experience. This includes comprehensive testing.
+*   **Modular Architecture:** Leverage Laravel's modular capabilities (especially via `nwidart/laravel-modules` and potentially the `Xot` module's patterns) to create decoupled, reusable, and maintainable feature sets.
+*   **Folio + Volt + Filament Focus:** For front-office development, prioritize Laravel Folio for routing, Volt/Livewire for dynamic UI components, and Filament for administrative interfaces, avoiding traditional `web.php`/`api.php` routes for public-facing UI.
+
+These principles guide all architectural decisions, code implementations, and documentation efforts to ensure a high-quality, maintainable, and scalable application.
+
+---
+
 ## Suggestions, Doubts, and Resolutions
 
 During the formulation of this plan, several points of potential ambiguity or areas for improvement emerged. Addressing these early will contribute to a more robust and consistent project.
