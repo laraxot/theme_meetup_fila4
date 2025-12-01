@@ -12,6 +12,7 @@ This document outlines a strategic plan to bring the Laravel Pizza Meetups proje
     *   **Action:** Audit all existing HTML files in `Themes/Meetup/resources/html/`.
     *   **Deliverable:** Ensure all pages (`index.html`, `login.html`, `register.html`, `events.html`, etc.) use the shared, JavaScript-loaded components for the navigation (`navigation-container`) and footer (`footer-container`).
     *   **Rationale:** Eliminates code duplication and centralizes shared UI elements.
+    *   **Layout Component Strategy:** Adhere to the defined layout component hierarchy (`x-layouts.main`, `x-layouts.app`, `x-layouts.guest`) as detailed in [Layout Component Strategy](./layout-component-strategy.md).
 
 2.  **Form Standardization:**
     *   **Action:** Review all forms (login, registration, contact) and standardize their appearance and structure.
