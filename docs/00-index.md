@@ -1,58 +1,49 @@
-# Documentation Index - Tema Meetup
+# Meetup Theme Documentation Index
 
-## 📚 Documentazione Principale
+## Core Concepts
 
-### Overview
-- **[README](./README.md)** - Panoramica generale del tema
-- **[Project Purpose](./project-purpose.md)** - Scopo del progetto tema (community meetups)
-- **[Project Purpose (Old)](./project-purpose-old.md)** - Scopo progetto originale (dual-purpose: pizzeria + community)
+- [Critical Rules Consolidated](critical-rules-consolidated.md) - Essential rules for Meetup theme
+- [Project Purpose](project-purpose.md) - Why this theme exists
+- [Project Philosophy](project-philosophy.md) - Core philosophy of the theme
+- [Theme Development Rules](theme-development-rules.md) - Development guidelines
+- [Architecture Folio Volt Filament](architecture-folio-volt-filament.md) - Architecture patterns
 
-### Architettura e Pattern
-- **[Folio + Volt Patterns](./folio-volt-patterns.md)** - Pattern comuni per Folio e Volt nel tema
-- **[Folio + Volt Projects Analysis](./folio-volt-projects-analysis.md)** - Analisi progetti reali con focus UI/UX e componenti applicabili al tema
-- **[Architecture Improvements](./architecture-improvements.md)** - Miglioramenti architetturali
-- **[Theme Integration Guide](./theme-integration-guide.md)** - Guida integrazione tema
-- **[Genesis Starter Kit Analysis](../../Modules/Meetup/docs/genesis-starter-kit-analysis.md)** - Analisi approfondita dello starter kit Genesis (TALL Stack + Folio + Volt)
-- **[Livewire Volt Folio Tutorial Analysis](../../Modules/Meetup/docs/livewire-volt-folio-tutorial-analysis.md)** - Analisi tutorial pratico: costruire podcast player con Folio + Volt
+## Implementation Guides
 
-### Design e UI/UX
-- **[Complete Design Analysis](./complete-design-analysis.md)** - Analisi completa design
-- **[Design Implementation Plan](./design-implementation-plan.md)** - Piano implementazione design
-- **[Design Synthesis](./design-synthesis.md)** - Sintesi design
-- **[Laravel Pizza Design Analysis](./laravelpizza-com-design-analysis.md)** - Analisi design laravelpizza.com
-- **[Best Practices Analysis](./best-practices-analysis.md)** - Analisi best practices
+- [Theme Styling Implementation](theme-styling-implementation.md) - Styling approach
+- [Theme Integration Guide](theme-integration-guide.md) - Integration patterns
+- [Theme Improvements](theme-improvements.md) - Improvement strategies
+- [Folio Volt Implementation](theme-folio-volt-implementation.md) - Implementation guide
+- [Folio Volt Best Practices](folio-volt-best-practices.md) - Best practices
 
-### Pagine Specifiche
-- **[Dashboard Page Design](./dashboard-page-design.md)** - Design pagina dashboard
-- **[Profile Page Design](./profile-page-design.md)** - Design pagina profilo
-- **[Register Page Design Error](./register-page-design-error.md)** - Errore e correzione pagina registrazione
-- **[Events Page](./EVENTS-PAGE.md)** - Pagina eventi
+## Frontend Assets
 
-### Logo e Branding
-- **[Logo Implementation Error](./logo-implementation-error.md)** - Errore implementazione logo
-- **[Logo Refactor 2025-11-28](./2025-11-28-logo-refactor.md)** - Refactor logo
+- [Frontend Asset Management](frontend-asset-management.md) - Asset management
+- [Vite Build Output Directory](vite-build-output-directory.md) - Build configuration
+- [Vite Asset Loading Best Practices](vite-asset-loading-best-practices.md) - Asset loading
+- [Theme Asset Synchronization Plan](theme-asset-synchronization-plan.md) - Asset sync
+- [Theme Asset Build System](theme-asset-build-system.md) - Build system
 
-### HTML e Static Version
-- **[HTML Notes](./html-notes.md)** - Note HTML
-- **[HTML Alignment Check](./html-alignment-check.md)** - Verifica allineamento HTML
-- **[Corrected Project Understanding](./corrected-project-understanding.md)** - Comprensione corretta progetto
+## Layout and Components
 
-### Troubleshooting
-- **[Error Analysis and Solution](./ERROR-ANALYSIS-AND-SOLUTION.md)** - Analisi errori e soluzioni
-- **[Troubleshooting](./troubleshooting/)** - Risoluzione problemi
+- [Layout Component Strategy](layout-component-strategy.md) - Layout strategy
+- [Layout Hierarchy Rules](layout-hierarchy-rules.md) - Layout rules
+- [Layout Philosophy Laraxot](layout-philosophy-laraxot.md) - Layout philosophy
+- [Block Components Structure](block-components-structure.md) - Component structure
+- [Metatags Component Usage](metatags-component-usage.md) - Metatag usage
 
-### Roadmap e Planning
-- **[Roadmap](./roadmap.md)** - Roadmap sviluppo tema
-- **[Project Completion Plan](./project-completion-plan.md)** - Piano completamento progetto
-- **[Implementation Summary](./IMPLEMENTATION-SUMMARY.md)** - Riepilogo implementazione
-- **[Implementation Log](./IMPLEMENTATION-LOG.md)** - Log implementazione
-- **[Next Steps Implementation](./NEXT_STEPS_IMPLEMENTATION.md)** - Prossimi passi implementazione
-- **[Theme Improvements](./theme-improvements.md)** - Miglioramenti tema
+## Pages and Features
 
-### Contributing
-- **[README Corrected](./README-CORRECTED.md)** - README corretto
+- [Events Page](events-page.md) - Event page implementation
+- [Events Page Analysis](events-page-analysis.md) - Event page analysis
+- [Events Page Differences Analysis](events-page-differences-analysis.md) - Event page differences
+- [Design Implementation Plan](design-implementation-plan.md) - Design approach
+- [Design Synthesis](design-synthesis.md) - Design synthesis
 
----
+## Troubleshooting
 
-**Ultimo Aggiornamento**: 2025-01-27
-
+- [Error Analysis and Solution](error-analysis-and-solution.md) - Error solutions
+- [Root Cause Found](root-cause-found.md) - Root cause analysis
+- [Missing View Fix Plan](missing-view-fix-plan.md) - Missing view fixes
+- [Missing Layout Section Fix Plan](missing-layout-section-fix-plan.md) - Layout fixes
+- [Troubleshooting Directory](troubleshooting/) - Detailed troubleshooting guides
