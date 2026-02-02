@@ -12,9 +12,17 @@
 - [Filament 5 – riferimento tema](filament-5-theme-reference.md) - Filament 5 requirements, nostro setup, CSS nel tema
 - [Grafica vs laravelpizza.com](grafica-confronto-laravelpizza.md) - Confronto grafica e uso MCP per screenshot
 - [Differenze grafica e miglioramenti](differenze-grafica-e-miglioramenti.md) - Differenze dettagliate (header, hero, features, CTA, footer) e priorità miglioramenti; screenshot in screenshots/grafica-confronto
+- [Differenze grafica approfondimento](differenze-grafica-approfondimento.md) - Mappatura file, codice (logo, hero SVG, nav/footer URL), checklist tecnica
 - [Evidenzia differenze](evidenzia-differenze.md) - Riepilogo rapido differenze e link agli screenshot
+- [Footer logo confronto](footer-logo-confronto.md) - Logo footer vs laravelpizza.com, screenshot, roadmap
 - [Theme Resolution and Workflow](theme-resolution-and-workflow.md) - Risoluzione tema (APP_URL → pub_theme), build e copy
 - [MCP Configuration](mcp-configuration.md) - MCP per confronto grafica e task
+- [Laravel Localization Implementation](laravel-localization-implementation-complete.md) - Complete Laravel Localization setup and configuration
+- [Localization Standard](localization-standard.md) - Standard localization practices and patterns
+- [UI/UX Language Switcher](../../Modules/Meetup/docs/ui-ux-language-switcher-standard.md) - Design standards for language selection
+- [Events Page Comparison](events-page-comparison.md) - Comparison of events page with laravelpizza.com
+- [Events Comparison](events-comparison/) - Detailed events page comparison analysis
+- [Visual Comparison](visual-comparison/) - Visual comparison tools and analysis
 
 ## Filament 5.x Upgrade
 
@@ -24,9 +32,13 @@
 
 ## Visual Analysis & Parity
 
+- [Visual Comparison Local vs Original](visual-comparison-local-vs-original.md) - Confronto completo homepage locale vs laravelpizza.com con screenshot
+- [Events Page Comparison](events-page-comparison.md) - Confronto pagina events (CRITICO: view mancante)
+- [Footer Logo Confronto](footer-logo-confronto.md) - Logo footer analisi e roadmap
 - [Gap Documentation](visual-analysis/gap-documentation.md) - Status and differences from target site
 - [Difference Analysis](visual-analysis/difference-analysis.md) - Technical breakdown of UI inconsistencies
 - [Screenshots Cache](visual-analysis/screenshots/) - Collection of visual references
+- Screenshots: `screenshots/local/`, `screenshots/original/`, `screenshots/local-events/`, `screenshots/original-events/`
 
 ## Implementation Guides
 

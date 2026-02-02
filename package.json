@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "copy": "cp -r ./public/* ../../../public_html/themes/Meetup",
-    "screenshots": "node scripts/capture-screenshots.mjs"
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "screenshots:footer": "node scripts/capture-footer-screenshots.mjs"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",

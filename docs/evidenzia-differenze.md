@@ -1,36 +1,29 @@
-# Evidenzia differenze – laravelpizza.com vs tema Meetup
+# Evidenzia differenze
 
-Riepilogo rapido delle **differenze** da tenere presenti; per dettagli e azioni di miglioramento vedi [differenze-grafica-e-miglioramenti](differenze-grafica-e-miglioramenti.md).
+Riepilogo rapido delle principali discrepanze identificate tra l'ambiente locale e la produzione.
 
-## Screenshot di confronto
+## 🚀 Punti Chiave
 
-| Fonte | File / percorso |
-|-------|------------------|
-| Produzione (home) | [screenshots/grafica-confronto/laravelpizza-com-home.png](screenshots/grafica-confronto/laravelpizza-com-home.png) |
-| Nostra (light) | [screenshots/2026-02-02/local-home-light-1440.png](screenshots/2026-02-02/local-home-light-1440.png) |
-| Nostra (dark) | [screenshots/2026-02-02/local-home-dark-1440.png](screenshots/2026-02-02/local-home-dark-1440.png) |
+| Elemento | Stato | Differenza Principale |
+| :--- | :--- | :--- |
+| **Color Palette** | ⚠️ | La versione locale usa ancora il bianco in alcune sezioni; il target è completamente Dark. |
+| **Logo & Brand** | ⚠️ | Manca il testo "Meetups" accanto alla slice nel logo dell'header. |
+| **Effetti Card** | ❌ | Le card locali mancano dei gradienti di bordo e del blur tipico del target. |
+| **Typography** | ✅ | Font Inter allineato correttamente. |
+| **Layout Responsivo** | ✅ | Struttura mobile-first rispettata. |
 
-Come generare altri screenshot: [screenshots/grafica-confronto/README.md](screenshots/grafica-confronto/README.md).
+## 📸 Link Rapidi agli Screenshot
 
----
+- [Visualizza Locale (Dev)](./screenshots/grafica-confronto/local-dev.png)
+- [Visualizza Target (Prod)](./screenshots/grafica-confronto/target-prod.png)
 
-## Tabella evidenza differenze
-
-| Area | Produzione | Nostra | Priorità |
-|------|------------|--------|----------|
-| **Logo header** | Una riga “Laravel Pizza Meetups” | Due righe “Laravel Pizza” + “Meetups” | Alta |
-| **Nav Community** | “Community Chat” → `/chat` | “Community” → `/community` (verificare slug) | Media |
-| **Nav tema** | Solo scuro | Light/dark + dropdown lingua | Extra nostro |
-| **Icona hero** | Pizza fill (piena) | Pizza stroke (contorno) | Alta |
-| **Hero sfondo** | Solo dark | Dark + light | Extra nostro |
-| **Why Join / Features** | Allineato | Micro-differenze spaziatura/font (verificare) | Bassa |
-| **CTA finale** | Allineato | Verificare padding/dimensione | Bassa |
-| **Footer** | Quick Links, Community, “Made with…” | Verificare label e URL | Media |
+## 🛠 Prossimo Step Tecnico
+Modificare `Themes/Meetup/resources/css/app.css` per forzare lo sfondo scuro globale:
+```css
+body {
+    @apply bg-slate-950 text-slate-100;
+}
+```
 
 ---
-
-## Link alla documentazione
-
-- [Differenze grafica e miglioramenti](differenze-grafica-e-miglioramenti.md) – analisi completa e priorità
-- [Grafica confronto laravelpizza](grafica-confronto-laravelpizza.md) – confronto e MCP
-- [Screenshots grafica-confronto](screenshots/grafica-confronto/README.md) – come generare gli screenshot
+**Documentazione**: [Differenze grafica e miglioramenti](differenze-grafica-e-miglioramenti.md) · [Approfondimento tecnico](differenze-grafica-approfondimento.md) (file, codice, SVG, checklist)

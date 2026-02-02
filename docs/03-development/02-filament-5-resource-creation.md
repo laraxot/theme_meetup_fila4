@@ -48,16 +48,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
+use Modules\Xot\Filament\Resources\XotBaseResource;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
 
-class EventResource extends Resource
+class EventResource extends XotBaseResource
 {
     protected static ?string $model = Event::class;
 
@@ -129,6 +127,18 @@ class EventResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function getInfolistSchema(): array
+    {
+        return [
+            'main_section' => Tables\Infolists\Components\Section::make('Event Details')
+                ->schema([
+                    Tables\Infolists\Components\TextEntry::make('title'),
+                    Tables\Infolists\Components\TextEntry::make('status')
+                        ->badge(),
+                ]),
+        ];
     }
 
     public static function getRelations(): array
@@ -210,12 +220,13 @@ Tables\Columns\ImageColumn::make('cover_image')
     ->disk('public')
     ->visibility('public'),
 
-Tables\Columns\BadgeColumn::make('status')
-    ->colors([
-        'success' => 'published',
-        'warning' => 'draft',
-        'danger' => 'cancelled',
-    ]),
+Tables\Columns\TextColumn::make('status')
+    ->badge()
+    ->color(fn (string $state): string => match ($state) {
+        'published' => 'success',
+        'draft' => 'warning',
+        'cancelled' => 'danger',
+    }),
 
 Tables\Columns\TimestampColumn::make('created_at')
     ->dateTime()

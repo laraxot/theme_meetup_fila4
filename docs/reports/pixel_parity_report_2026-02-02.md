@@ -19,6 +19,11 @@ Confronto visivo basato su screenshot (viewport `1440x900`) tra:
 - **Locale – light**: `../screenshots/2026-02-02/local-home-light-1440.png`
 - **Locale – dark**: `../screenshots/2026-02-02/local-home-dark-1440.png`
 
+#### Events
+
+- **Events – light**: `../screenshots/2026-02-02/local-events-light-1440.png`
+- **Events – dark**: `../screenshots/2026-02-02/local-events-dark-1440.png`
+
 ### Dominio pubblico attuale
 
 - **laravelpizza.com (landing esterna)**: `../screenshots/2026-02-02/laravelpizza-com-hostinger-1440.png`
@@ -41,6 +46,23 @@ Questa sezione descrive miglioramenti UI per “rifinire” il tema Meetup, indi
 - **Logo**
   - **Stato**: la navbar usa il componente `x-ui.logo` (single source of truth del tema).
   - **Verifica**: controllare resa in light/dark e su breakpoint mobile.
+
+#### Misure oggettive header (home vs events, light vs dark)
+
+Ho estratto via Puppeteer (DOM + computed styles) un set di metriche minime e ripetibili.
+
+- **JSON completo**: `header_metrics_2026-02-02.json`
+
+Tabella sintetica:
+
+| Pagina | Mode | Nav position | Nav height | Nav class (estratto) | Nav text color | Nav bg | Note |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `/it` | light | fixed | 65 | `bg-slate-100/95 ... border-slate-200 ... shadow-sm` | `rgb(15,23,42)` | `transparent` (via class) | header “fisso” |
+| `/it` | dark | fixed | 65 | `... dark:bg-slate-900/95 ... dark:border-slate-800 ...` | `rgb(255,255,255)` | `oklab(... / 0.95)` | no shadow in dark |
+| `/it/events` | light | sticky | 65 | `bg-slate-800/50 ... border-slate-700 sticky` | `rgb(255,255,255)` | `oklab(... / 0.5)` | header “sticky”, stile diverso dalla home |
+| `/it/events` | dark | sticky | 65 | `bg-slate-800/50 ... border-slate-700 sticky` | `rgb(255,255,255)` | `oklab(... / 0.5)` | identico al light |
+
+**Impatto**: oggi **home** e **events** usano due navbar diverse (fixed + light palette vs sticky + dark palette). Se l’obiettivo è coerenza grafica totale, va unificata la sorgente della navbar anche per `/it/events`.
 
 - **Language switcher**
   - **Stato**: usa `x-ui.language-switcher` (dropdown inline).
